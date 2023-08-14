@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>음식 투표</title>
+</head>
+<body>
+    <h1>음식 투표 결과</h1>
+    <div id="result"></div>
+
+    <script>
+        function voteForMenu(menu) {
+            storeVoteResult(menu);
+            updateResult();
+            alert(`${menu} 투표가 완료되었습니다!`);
+        }
+
+        function storeVoteResult(menu) {
+            if (!localStorage.votedMenus) {
+                localStorage.votedMenus = JSON.stringify({});
+            }
+
+            const votedMenus = JSON.parse(localStorage.votedMenus);
+
+            if (!votedMenus[menu]) {
+                votedMenus[menu] = 1;
+            } else {
+                votedMenus[menu]++;
+            }
+
+            localStorage.votedMenus = JSON.stringify(votedMenus);
+        }
+
+        function updateResult() {
+            const top3Menus = getTopMenuResults(3);
+            const resultElement = document.getElementById("result");
+            resultElement.innerHTML = "<h2>투표 결과</h2>";
+            
+            for (const [index, menu] of top3Menus.entries()) {
+                const rank = index + 1;
+                const votes = JSON.parse(localStorage.votedMenus)[menu];
+                resultElement.innerHTML += `<p>${rank}등: ${menu} (${votes}표)</p>`;
+            }
+        }
+
+        function getTopMenuResults(num) {
+            const votedMenus = JSON.parse(localStorage.votedMenus || "{}");
+            const sortedMenus = Object.keys(votedMenus).sort((a, b) => votedMenus[b] - votedMenus[a]);
+            return sortedMenus.slice(0, num);
+        }
+
+        updateResult(); 
+    </script>
+</body>
+</html>
