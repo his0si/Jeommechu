@@ -12,3 +12,14 @@ function getMenuList() {
   ];
   return menuList;
 }
+// getMenuList 함수 호출하여 메뉴 리스트 가져오기
+const menuList = getMenuList();
+
+// 가져온 메뉴 리스트를 HTML에 추가하기
+const menuListElement = document.getElementById("menuList");
+
+menuList.forEach(menu => {
+  const listItem = document.createElement("li");
+  listItem.textContent = menu;
+  menuListElement.appendChild(listItem);
+});
